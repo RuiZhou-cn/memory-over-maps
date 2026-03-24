@@ -1,0 +1,12 @@
+# HM3D-OVON ObjectNav Evaluation Config
+# Used by `python -m src.cli.eval_ovon`.
+# Open-vocabulary categories (379). Same meshes and navigation params as standard ObjectNav.
+
+_base: base_nav.yaml
+
+navigation:
+  success_distance: 0.25
+
+data:
+  root: data/hm3d
+  ovon_root: data/hm3d_ovon

@@ -1,0 +1,9 @@
+# HM3D ObjectNav Evaluation Config
+# Used by `python -m src.cli.eval_hm3d`.
+# Parameters match VLFM's DD-PPO PointNav training config.
+
+_base: base_nav.yaml
+
+data:
+  root: data/hm3d
+  split: val

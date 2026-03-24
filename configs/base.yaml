@@ -1,0 +1,39 @@
+# Base Config — shared defaults for all experiments
+# Experiment configs inherit via _base: base.yaml
+
+retrieval:
+  model: google/siglip2-so400m-patch14-384
+  stage1_top_k: 10
+  stage2_top_k: 10
+  min_score: 0.01
+
+keyframing:
+  rotation_threshold: 15.0
+  translation_threshold: 0.25
+  min_frames_between: 5
+
+vlm:
+  model: Qwen/Qwen2.5-VL-7B-Instruct
+  batch_size: 1
+
+sam3:
+  confidence: 0.0
+  batch_size: 3
+
+multi_view:
+  spatial_fusion: true
+  fusion_threshold: 0.5
+  overlap_threshold: 0.3
+  spatial_max_views: 5
+  spatial_max_distance: 3.0
+  frustum_margin: 0.1
+  hdbscan: true
+  hdbscan_min_cluster_size: 20
+  hdbscan_min_samples: 5
+  grouping_overlap_threshold: 0.15
+  grouping_centroid_fallback: 3.0
+  grouping_proximity_threshold: 0.5
+  max_mask_depth: 4.0
+
+eval:
+  top_k: 5

@@ -1,0 +1,56 @@
+# Base Navigation Config — shared defaults for HM3D, MP3D, OVON
+# Inherits pipeline defaults from base.yaml.
+
+_base: base.yaml
+
+agent:
+  height: 0.88
+  radius: 0.18
+  sensor_height: 0.88
+
+actions:
+  forward_step_size: 0.25
+  turn_angle: 30
+
+sensor:
+  width: 640
+  height: 480
+  hfov: 79
+  min_depth: 0.5
+  max_depth: 5.0
+
+policy:
+  weights: checkpoints/navigation/pointnav_weights.pth
+  input_size: 224
+
+navigation:
+  max_steps: 500
+  stop_radius: 0.9
+  success_distance: 0.1
+  distance_to: VIEW_POINTS
+  multi_goal: true
+  stuck_window: 30
+  stuck_threshold: 0.5
+  oscillation_window: 60
+  oscillation_ratio: 0.15
+  oscillation_min_path: 2.0
+  opportunistic_radius: 0.9
+  cluster_distance: 2.0
+  max_goal_switches: 4
+  visibility_check: true
+  depth_tolerance: 0.3
+  min_visible_fraction: 0.05
+  accumulate_visible: true
+  max_policy_stop_overrides: 5
+
+camera:
+  hfov: 79.0
+
+keyframing:
+  enabled: true
+
+vlm:
+  batch_size: 10
+
+eval:
+  top_k: 10

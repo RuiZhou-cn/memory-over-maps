@@ -1,0 +1,25 @@
+# Demo Config — TSDF mesh viewer + interactive search
+# Used by `python demo/demo.py`.
+# CLI flags override values set here.
+
+_base: base.yaml
+
+tsdf:
+  voxel_size: 0.015              # MP3D auto-overrides to 0.03
+  voxel_size_mp3d: 0.03          # coarser for sparse panoramic captures
+  sdf_trunc_factor: 5.0
+  max_depth: 6.0
+  max_faces: 1000000
+  rot_thresh: 30.0               # aggressive for large custom scenes (was 10)
+  trans_thresh: 0.50             # aggressive for large custom scenes (was 0.15)
+
+retrieval:
+  stage1_top_k: 10
+  stage2_top_k: 10
+
+multi_view:
+  spatial_max_views: 1           # default 1 for speed; increase for denser object clouds
+  max_mask_depth: 0.0            # 0 = disabled
+
+display:
+  port: 8080

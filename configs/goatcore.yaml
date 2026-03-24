@@ -1,0 +1,10 @@
+# Goat-Core Evaluation Config
+# Used by `python -m src.cli.eval_goatcore`.
+
+_base: base.yaml
+
+data:
+  root: data/Goat-core
+
+eval:
+  threshold: 1.5

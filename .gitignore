@@ -1,0 +1,91 @@
+# Dataset files (large, user-provided)
+data/*
+
+# Exception: bundled HM3D camera poses tarball (tracked in repo)
+!data/hm3d_poses.tar.gz
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Model weights
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+models/weights/
+
+# Exception: tracked checkpoints (DD-PPO PointNav, etc.)
+!checkpoints/
+!checkpoints/**
+!checkpoints/**/*.pth
+
+# Logs and outputs
+logs/
+outputs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Cache
+.cache/
+*.cache
+.pytest_cache/
+.ruff_cache/
+
+# Environment variables and secrets
+.env
+.env.local
+*.key
+*_secret.txt
+
+# Output files (auto-generated)
+output/
+results/
+ignore/
+
+# Temporary files
+tmp_*.md
+
+# Backup files from prepare_data.py
+*.bak
+
+# Third-party cloned repos
+third_party/

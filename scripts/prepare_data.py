@@ -399,8 +399,8 @@ def _fix_ovon_scene_ids(data: dict) -> dict:
         new_gbc = {}
         for key, val in gbc.items():
             new_key = key
-        if changed:
-            data["goals_by_category"] = new_gbc
+            new_gbc[new_key] = val
+        data["goals_by_category"] = new_gbc
 
     return data if changed else None
 

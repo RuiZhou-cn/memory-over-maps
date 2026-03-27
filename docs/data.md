@@ -53,11 +53,11 @@ Requires HM3D ObjectNav setup (Section 2) first. OVON episodes from [HuggingFace
 cd /path/to/memory-over-maps
 git clone https://huggingface.co/datasets/nyokoyama/hm3d_ovon data/hm3d_ovon
 
-# if you cannot extract the .tar file get the episodes manually
-wget -O data/hm3d_ovon/hm3d.tar.gz "https://huggingface.co/datasets/nyokoyama/hm3d_ovon/resolve/main/hm3d.tar.gz?download=true"
-
 # Rewrites scene_dataset_config and scene_id paths in episode JSONs
 python scripts/prepare_data.py --dataset ovon
+
+# If hm3d.tar.gz does not have any content get the episodes manually and rerun prepare_data.py
+wget -O data/hm3d_ovon/hm3d.tar.gz "https://huggingface.co/datasets/nyokoyama/hm3d_ovon/resolve/main/hm3d.tar.gz?download=true"
 ```
 
 ---

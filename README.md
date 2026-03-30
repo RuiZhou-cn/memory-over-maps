@@ -21,8 +21,9 @@
 <p align="center">
   <h2 align="center">
   <a href="https://arxiv.org/abs/2603.20530">Paper</a> |
-  <a href="https://youtu.be/p9U6tTLyf-8">Video</a> |
-  <a href="https://ruizhou-cn.github.io/memory-over-maps/">Project Page</a>
+  <a href="https://youtu.be/LOPlDtYiDms">Video</a> |
+  <a href="https://ruizhou-cn.github.io/memory-over-maps/">Project Page</a> |
+  <a href="docs/demo.md">Interactive Demo</a>
   </h2>
 </p>
 

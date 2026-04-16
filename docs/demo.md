@@ -42,8 +42,11 @@ python demo/demo.py --dataset hm3d --list-scenes
 
 > **Tip:** Edit `configs/demo.yaml` to tune settings. If running out of GPU memory, try a smaller VLM (e.g. `vlm.model: Qwen/Qwen2.5-VL-3B-Instruct`) and reduce `sam3.batch_size`.
 
+> **Swap the retrieval backbone:** SigLIP2 is the default. To try Qwen3-VL-Embedding (or CLIP/ALIGN/FLAVA), uncomment the `retrieval.model` block in `configs/demo.yaml`. The active backbone is shown in the viser **Models** panel, and feature caches are keyed per-model under `results/features/` — switching rebuilds the index once.
+
 ### Display Controls
 
+- **Models** — read-only panel showing the active retrieval backbone and VLM re-ranker (edit `configs/demo.yaml` to switch).
 - **VLM Re-ranking** — on by default; uncheck for faster feature-only retrieval.
 - **Show Frustums / Show Object Cloud / Point Size** — toggle and resize visual overlays.
 - **Spatial Fusion** — merges segmentation across nearby views into a denser point cloud. Off = single-view only.

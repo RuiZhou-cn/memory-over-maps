@@ -8,10 +8,18 @@ from PIL import Image
 from transformers import CLIPModel, CLIPProcessor
 
 from .base_feature_extractor import BaseFeatureExtractor
+from .registry import register_extractor
 
 logger = logging.getLogger(__name__)
 
 
+@register_extractor(
+    model_type="clip",
+    default_model_name="openai/clip-vit-large-patch14",
+    name_patterns=("clip",),
+    friendly_names=("clip-large",),
+    friendly_variants={"clip-base": "openai/clip-vit-base-patch32"},
+)
 class CLIPFeatureExtractor(BaseFeatureExtractor):
     """CLIP-based feature extraction.
 

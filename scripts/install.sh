@@ -34,11 +34,11 @@ echo "Installing project (Python $PY_VER, env: $CONDA_ENV, CUDA)"
 echo "=================================="
 
 echo ""
-echo "[1/5] Installing PyTorch (CUDA 12.8)..."
+echo "[1/6] Installing PyTorch (CUDA 12.8)..."
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
 
 echo ""
-echo "[2/5] Installing habitat-lab..."
+echo "[2/6] Installing habitat-lab..."
 HABITAT_LAB_DIR="${HABITAT_LAB_DIR:-}"
 
 if [ -z "$HABITAT_LAB_DIR" ]; then
@@ -62,15 +62,15 @@ fi
 pip install -e "$HABITAT_LAB_DIR"
 
 echo ""
-echo "[3/5] Installing project package..."
+echo "[3/6] Installing project package..."
 pip install -e ".[dev]"
 
 echo ""
-echo "[4/5] Installing habitat-sim via conda..."
+echo "[4/6] Installing habitat-sim via conda..."
 conda install habitat-sim=0.3.3 -c conda-forge -c aihabitat -y
 
 echo ""
-echo "[5/5] Installing SAM3..."
+echo "[5/6] Installing SAM3..."
 SAM3_DIR="$PROJECT_DIR/third_party/sam3"
 pip install einops decord pycocotools psutil
 
@@ -84,6 +84,27 @@ fi
 
 echo "Installing SAM3 in editable mode..."
 (cd "$SAM3_DIR" && pip install -e .)
+
+echo ""
+echo "[6/6] Installing Qwen3-VL-Embedding (optional)..."
+# Upstream pyproject pins requires-python>=3.11, which conflicts with habitat-sim's
+# Python 3.9 pin. We only need the source file (src/models/qwen3_vl_embedding.py),
+# which our extractor loads via importlib — so clone it and install only its
+# runtime dependencies, skipping `pip install -e .`.
+QWEN3VL_DIR="$PROJECT_DIR/third_party/qwen3-vl-embedding"
+{
+    pip install qwen-vl-utils
+    if [ -d "$QWEN3VL_DIR" ]; then
+        echo "Qwen3-VL-Embedding already exists at $QWEN3VL_DIR, pulling latest..."
+        (cd "$QWEN3VL_DIR" && git pull)
+    else
+        echo "Cloning Qwen3-VL-Embedding..."
+        git clone https://github.com/QwenLM/Qwen3-VL-Embedding.git "$QWEN3VL_DIR"
+    fi
+} || {
+    echo "WARNING: Qwen3-VL-Embedding setup failed. SigLIP2 (default) remains available."
+    echo "         See https://github.com/QwenLM/Qwen3-VL-Embedding to retry manually."
+}
 
 echo ""
 echo "=================================="
@@ -101,6 +122,15 @@ import transformers; print(f'Transformers {transformers.__version__}')
 import habitat; print('habitat-lab: OK')
 import habitat_sim; print('habitat-sim: OK')
 from sam3.model_builder import build_sam3_image_model; print('SAM3: OK')
+import os
+_qwen3vl_src = os.path.join(
+    '$PROJECT_DIR', 'third_party', 'qwen3-vl-embedding',
+    'src', 'models', 'qwen3_vl_embedding.py'
+)
+if os.path.exists(_qwen3vl_src):
+    print('Qwen3-VL-Embedding: OK (source available)')
+else:
+    print('Qwen3-VL-Embedding: not installed (optional)')
 "
 
 echo ""

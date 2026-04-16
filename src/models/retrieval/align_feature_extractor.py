@@ -11,10 +11,17 @@ from PIL import Image
 from transformers import AlignModel, AlignProcessor
 
 from .base_feature_extractor import BaseFeatureExtractor
+from .registry import register_extractor
 
 logger = logging.getLogger(__name__)
 
 
+@register_extractor(
+    model_type="align",
+    default_model_name="kakaobrain/align-base",
+    name_patterns=("align",),
+    friendly_names=("align",),
+)
 class ALIGNFeatureExtractor(BaseFeatureExtractor):
     """ALIGN-based feature extraction.
 

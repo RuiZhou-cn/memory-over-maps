@@ -70,6 +70,21 @@ python -m src.cli.eval_sunrgbd
 
 > **Out of GPU memory?** Use a smaller VLM (e.g. `vlm.model: Qwen/Qwen2.5-VL-3B-Instruct`) and reduce `sam3.batch_size` in your config.
 
+### Swapping the retrieval backbone
+
+SigLIP2 is the default; other registered backbones can be selected from YAML. Override `retrieval.model` in the config that applies to your run (e.g. `configs/demo.yaml`, `configs/hm3d.yaml`):
+
+```yaml
+retrieval:
+  model: Qwen/Qwen3-VL-Embedding-2B        # or a friendly name: qwen3-vl-2b, clip-large, align, flava
+  extractor_kwargs:                        # backbone-specific kwargs (optional)
+    instruction: "Retrieve images relevant to query."
+    batch_size: 1                          # Qwen3-VL is token-heavy; keep small on 24GB
+    max_pixels: 147456                     # caps visual tokens per image
+```
+
+Qwen3-VL-Embedding requires the optional install step `[6/6]` in `scripts/install.sh` (clones `third_party/qwen3-vl-embedding`). Adding a new backbone is one file + one `@register_extractor(...)` decorator under `src/models/retrieval/`.
+
 ### Results
 
 <details>
@@ -121,7 +136,7 @@ src/
 ├── evaluation/       # Metrics accumulators and evaluation helpers
 ├── models/
 │   ├── vlm/          # Vision-language model (Qwen2.5-VL)
-│   ├── retrieval/    # Feature extractors (SigLIP2, CLIP, ALIGN, FLAVA) + FAISS search
+│   ├── retrieval/    # Pluggable feature extractors (SigLIP2 default; CLIP, ALIGN, FLAVA, Qwen3-VL-Embedding) + FAISS search
 │   ├── navigation/   # DD-PPO PointNav policy + multi-goal agent
 │   └── segmentation/ # SAM3 text-prompted segmentation
 └── utils/            # Projection, geometry, data loading, keyframing, spatial fusion

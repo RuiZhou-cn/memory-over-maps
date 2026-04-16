@@ -13,10 +13,18 @@ from PIL import Image
 from transformers import AutoModel, AutoProcessor
 
 from .base_feature_extractor import BaseFeatureExtractor
+from .registry import register_extractor
 
 logger = logging.getLogger(__name__)
 
 
+@register_extractor(
+    model_type="siglip2",
+    default_model_name="google/siglip2-so400m-patch14-384",
+    name_patterns=("siglip",),
+    friendly_names=("siglip2",),
+    is_default=True,
+)
 class SigLIP2FeatureExtractor(BaseFeatureExtractor):
     """SigLIP2-based feature extraction with calibrated similarity scores.
 

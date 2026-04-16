@@ -17,20 +17,8 @@ os.environ["HABITAT_SIM_LOG"] = "quiet"
 os.environ["GLOG_minloglevel"] = "2"
 
 from src.evaluation.helpers import suppress_stderr
-suppress_stderr(lambda: __import__("src.dataloaders.ovon"))  # registers OVON-v1 dataset
 
-from src.utils.config import (
-    OVON_SPLIT_FILENAMES,
-    get_scene_name,
-    load_config,
-    merge_ovon_config_and_args,
-)
-from src.models.navigation.pointnav_policy import PointNavController
-from src.pipelines.navigation import (
-    record_skip,
-    run_nav_episodes,
-)
-from src.pipelines.retrieval import build_retriever
+suppress_stderr(lambda: __import__("src.dataloaders.ovon"))  # registers OVON-v1 dataset
 
 import argparse
 import json
@@ -38,6 +26,19 @@ import time
 from pathlib import Path
 
 import numpy as np
+
+from src.models.navigation.pointnav_policy import PointNavController
+from src.pipelines.navigation import (
+    record_skip,
+    run_nav_episodes,
+)
+from src.pipelines.retrieval import build_retriever
+from src.utils.config import (
+    OVON_SPLIT_FILENAMES,
+    get_scene_name,
+    load_config,
+    merge_ovon_config_and_args,
+)
 
 ALL_SPLITS = list(OVON_SPLIT_FILENAMES.keys())
 
@@ -186,6 +187,7 @@ def _evaluate_split(
             use_vlm=args.vlm,
             existing_retriever=retriever,
             keyframe_ids=all_frame_ids if args.keyframing else None,
+            extractor_kwargs=args.extractor_kwargs,
         )
 
         raw_poses, raw_fids = scene_loader.get_all_poses()

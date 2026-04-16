@@ -135,8 +135,9 @@ class SAM3Segmenter:
         if isinstance(image, np.ndarray):
             image = Image.fromarray(image)
 
-        state = self.processor.set_image(image)
-        state = self.processor.set_text_prompt(text_query, state)
+        with torch.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=self.device == "cuda"):
+            state = self.processor.set_image(image)
+            state = self.processor.set_text_prompt(text_query, state)
 
         result = _extract_best(state.get('masks', None), state.get('scores', None))
 
@@ -233,7 +234,9 @@ class SAM3Segmenter:
                 batch, torch.device(self.device), non_blocking=True,
             )
 
-            with torch.inference_mode():
+            with torch.inference_mode(), torch.autocast(
+                device_type="cuda", dtype=torch.bfloat16, enabled=self.device == "cuda",
+            ):
                 output = self.model(batch)
                 processed = self._batch_postprocessor.process_results(
                     output, batch.find_metadatas,
@@ -269,11 +272,11 @@ def _extract_best(mask_data, score_data) -> dict:
         return _EMPTY_RESULT
 
     if isinstance(mask_data, torch.Tensor):
-        mask_data = mask_data.cpu().numpy()
+        mask_data = mask_data.float().cpu().numpy() if mask_data.dtype == torch.bfloat16 else mask_data.cpu().numpy()
 
     if score_data is not None:
         if hasattr(score_data, 'cpu'):
-            score_data = score_data.cpu().numpy()
+            score_data = score_data.float().cpu().numpy() if score_data.dtype == torch.bfloat16 else score_data.cpu().numpy()
         if isinstance(score_data, np.ndarray):
             if score_data.ndim == 0:
                 score_data = score_data[np.newaxis]

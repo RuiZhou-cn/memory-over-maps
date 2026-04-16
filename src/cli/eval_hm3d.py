@@ -20,13 +20,13 @@ from pathlib import Path
 
 import numpy as np
 
-from src.utils.config import get_scene_name, load_config, merge_hm3d_config_and_args
 from src.models.navigation.pointnav_policy import PointNavController
 from src.pipelines.navigation import (
     run_nav_episodes,
     save_results_json,
 )
 from src.pipelines.retrieval import build_retriever
+from src.utils.config import get_scene_name, load_config, merge_hm3d_config_and_args
 
 
 def parse_args():
@@ -181,6 +181,7 @@ def main():
                 use_vlm=args.vlm,
                 existing_retriever=retriever,
                 keyframe_ids=all_frame_ids if args.keyframing else None,
+                extractor_kwargs=args.extractor_kwargs,
             )
 
         all_poses_raw = None

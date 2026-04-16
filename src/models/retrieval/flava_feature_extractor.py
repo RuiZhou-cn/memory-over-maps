@@ -11,10 +11,17 @@ from PIL import Image
 from transformers import FlavaModel, FlavaProcessor
 
 from .base_feature_extractor import BaseFeatureExtractor
+from .registry import register_extractor
 
 logger = logging.getLogger(__name__)
 
 
+@register_extractor(
+    model_type="flava",
+    default_model_name="facebook/flava-full",
+    name_patterns=("flava",),
+    friendly_names=("flava",),
+)
 class FLAVAFeatureExtractor(BaseFeatureExtractor):
     """FLAVA-based feature extraction.
 

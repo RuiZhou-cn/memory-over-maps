@@ -1,24 +1,13 @@
-"""Factory for creating feature extractors."""
+"""Factory for creating feature extractors.
+
+All extractor classes are self-registered via ``@register_extractor`` in
+:mod:`registry`. This factory just looks up the class and builds it.
+"""
 
 from __future__ import annotations
 
-import importlib
-
 from .base_feature_extractor import BaseFeatureExtractor
-from .model_registry import MODEL_REGISTRY
-
-DEFAULT_MODELS = {
-    entry["model_type"]: entry["model_name"]
-    for entry in MODEL_REGISTRY.values()
-    if entry.get("default", False)
-}
-
-_EXTRACTORS = {
-    "clip": (".clip_feature_extractor", "CLIPFeatureExtractor"),
-    "siglip2": (".siglip2_feature_extractor", "SigLIP2FeatureExtractor"),
-    "align": (".align_feature_extractor", "ALIGNFeatureExtractor"),
-    "flava": (".flava_feature_extractor", "FLAVAFeatureExtractor"),
-}
+from .registry import get_default_model_name, get_extractor_class
 
 
 def create_feature_extractor(
@@ -29,38 +18,29 @@ def create_feature_extractor(
     batch_size: int = 32,
     **kwargs,
 ) -> BaseFeatureExtractor:
-    """Factory function to create feature extractors.
+    """Instantiate a registered feature extractor.
 
     Args:
-        model_type: Type of feature extractor ("clip", "siglip2", "align", "flava")
-        model_name: Model name/path (optional, uses default if None)
-        device: Device to run on (e.g. "cuda" or "cpu")
-        normalize: Whether to L2-normalize features (default: True)
-        batch_size: Batch size for feature extraction (default: 32)
-
-    Returns:
-        Instance of feature extractor
+        model_type: Registered type key (e.g. ``"siglip2"``, ``"qwen3_vl"``).
+        model_name: HF id / path. Defaults to the type's ``default_model_name``.
+        device: Torch device string.
+        normalize: L2-normalize features (pass-through to the extractor).
+        batch_size: Per-forward batch size for image extraction.
+        **kwargs: Forwarded to the extractor's constructor — backbone-specific
+            knobs (e.g. Qwen's ``instruction``) go here. Unknown kwargs are
+            swallowed by extractors that declare ``**_``, so mixed backbones in
+            a single sweep are safe.
     """
     model_type = model_type.lower()
+    cls = get_extractor_class(model_type)
 
     if model_name is None:
-        if model_type not in DEFAULT_MODELS:
-            raise ValueError(
-                f"Unsupported model type: '{model_type}'. "
-                f"Supported types: {list(DEFAULT_MODELS.keys())}"
-            )
-        model_name = DEFAULT_MODELS[model_type]
+        model_name = get_default_model_name(model_type)
 
-    if model_type in _EXTRACTORS:
-        module_path, class_name = _EXTRACTORS[model_type]
-        module = importlib.import_module(module_path, package=__package__)
-        cls = getattr(module, class_name)
-        return cls(
-            model_name=model_name, device=device,
-            normalize=normalize, batch_size=batch_size, **kwargs,
-        )
-    else:
-        raise ValueError(
-            f"Unsupported model type: '{model_type}'. "
-            f"Supported types: {list(DEFAULT_MODELS.keys())}"
-        )
+    return cls(
+        model_name=model_name,
+        device=device,
+        normalize=normalize,
+        batch_size=batch_size,
+        **kwargs,
+    )

@@ -65,6 +65,7 @@ def _merge_pipeline_args(args: argparse.Namespace, cfg: dict[str, Any], cli_args
     args.stage1_top_k = cfg_get(cfg, "retrieval", "stage1_top_k")
     args.stage2_top_k = cfg_get(cfg, "retrieval", "stage2_top_k")
     args.min_retrieval_score = cfg_get(cfg, "retrieval", "min_score")
+    args.extractor_kwargs = cfg_get(cfg, "retrieval", "extractor_kwargs") or {}
 
     args.vlm_model = cfg_get(cfg, "vlm", "model")
     args.vlm_batch_size = cfg_get(cfg, "vlm", "batch_size")

@@ -64,8 +64,8 @@ def main():
     tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
 
     cli_args = parse_args()
-    from src.utils.config import load_config, merge_goatcore_config_and_args
     from src.evaluation import load_and_merge_config
+    from src.utils.config import load_config, merge_goatcore_config_and_args
     args, config_path = load_and_merge_config(cli_args, load_config, merge_goatcore_config_and_args)
 
     from src.evaluation import validate_device
@@ -153,6 +153,7 @@ def main():
                 use_vlm=args.vlm,
                 existing_retriever=retriever,
                 cache_prefix="goatcore",
+                extractor_kwargs=args.extractor_kwargs,
             )
             prev_scene_name = scene_id
 

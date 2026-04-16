@@ -89,3 +89,7 @@ tmp_*.md
 
 # Third-party cloned repos
 third_party/
+
+# Claude-related files
+.claude/
+CLAUDE.md

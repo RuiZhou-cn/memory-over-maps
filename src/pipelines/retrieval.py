@@ -135,6 +135,7 @@ def build_retriever(
     existing_retriever=None,
     keyframe_ids=None,
     cache_prefix: str = "hm3d",
+    extractor_kwargs: dict | None = None,
 ):
     """Build feature index and hybrid retriever for a scene.
 
@@ -174,6 +175,7 @@ def build_retriever(
         feature_extractor = create_feature_extractor(
             model_type=model_type, model_name=retrieval_model,
             device=device, normalize=True,
+            **(extractor_kwargs or {}),
         )
         if use_vlm:
             from src.models.vlm import Qwen2_5VL

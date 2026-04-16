@@ -22,7 +22,6 @@ from pathlib import Path
 
 import numpy as np
 
-from src.utils.config import get_scene_name, load_config, merge_mp3d_config_and_args
 from src.models.navigation.pointnav_policy import PointNavController
 from src.pipelines.navigation import (
     record_skip,
@@ -30,6 +29,7 @@ from src.pipelines.navigation import (
     save_results_json,
 )
 from src.pipelines.retrieval import build_retriever
+from src.utils.config import get_scene_name, load_config, merge_mp3d_config_and_args
 
 
 def parse_args():
@@ -213,6 +213,7 @@ def main():
             existing_retriever=retriever,
             keyframe_ids=all_frame_ids if args.keyframing else None,
             cache_prefix="mp3d",
+            extractor_kwargs=args.extractor_kwargs,
         )
 
         all_poses_raw = None

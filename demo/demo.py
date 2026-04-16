@@ -226,6 +226,15 @@ def setup_gui(server, retriever, loader, images, frame_ids, sam3_segmenter, cfg,
     all_poses, all_fids = loader.get_all_poses()
     all_poses_cache = (all_poses, np.asarray(all_fids))
 
+    with server.gui.add_folder("Models"):
+        _retrieval_model = cfg_get(cfg, "retrieval", "model") or "(default)"
+        _vlm_model = cfg_get(cfg, "vlm", "model") or "(none)"
+        _vlm_active = "on" if retriever.has_vlm else "off"
+        server.gui.add_markdown(
+            f"**Retrieval:** `{_retrieval_model}`  \n"
+            f"**VLM re-ranker:** `{_vlm_model}` ({_vlm_active})"
+        )
+
     with server.gui.add_folder("Query"):
         query_input = server.gui.add_text("Text Query", initial_value="")
         top_k_slider = server.gui.add_slider(
@@ -636,6 +645,7 @@ def main():
         stage2_top_k=cfg_get(cfg, "retrieval", "stage2_top_k"),
         vlm_batch_size=cfg_get(cfg, "vlm", "batch_size"),
         keyframe_ids=keyframe_ids, cache_prefix=args.dataset,
+        extractor_kwargs=cfg_get(cfg, "retrieval", "extractor_kwargs") or {},
     )
 
     if args.query_res > 0:

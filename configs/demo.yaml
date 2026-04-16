@@ -14,8 +14,24 @@ tsdf:
   trans_thresh: 0.50             # aggressive for large custom scenes (was 0.15)
 
 retrieval:
+  # Backbone: omitted here -> inherits `model` from base.yaml (SigLIP2 default).
+  # To switch to Qwen3-VL-Embedding, uncomment the block below. Requires
+  # scripts/install.sh step [6/6] (clones third_party/qwen3-vl-embedding).
+  # Cache is keyed per-model, so switching rebuilds the index once under
+  # results/features/qwen3_vl_* (SigLIP2 cache is left intact).
+  # model: Qwen/Qwen3-VL-Embedding-2B
+  # extractor_kwargs:
+  #   instruction: "Retrieve images relevant to query."
+  #   batch_size: 1                # Qwen3-VL is token-heavy; keep at 1 on 24GB
+  #   max_pixels: 147456           # ~384*384 — caps visual tokens/image
   stage1_top_k: 10
   stage2_top_k: 10
+
+vlm:
+  model: Qwen/Qwen2.5-VL-3B-Instruct  # alternative: Qwen/Qwen2.5-VL-7B-Instruct
+
+sam3:
+  batch_size: 1
 
 multi_view:
   spatial_max_views: 1           # default 1 for speed; increase for denser object clouds

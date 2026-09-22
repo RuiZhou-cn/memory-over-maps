@@ -5,7 +5,7 @@
     ·
     <a href="https://xanderyap.com/">Xander&nbsp;Yap*</a>
     ·
-    Jianwen&nbsp;Cao
+    <a href="https://jianwencao.github.io/">Jianwen&nbsp;Cao</a>
     ·
     <a href="https://allison-lau.vercel.app/">Allison&nbsp;Lau</a>
     ·
@@ -13,10 +13,9 @@
     ·
     <a href="https://cvg.ethz.ch/team/Prof-Dr-Marc-Pollefeys">Marc&nbsp;Pollefeys</a>
   </p>
-  <p align="center"><strong>(* Equal Contribution)</strong></p>
+  <p align="center"><strong>* Equal Contribution</strong></p>
+  <p align="center"><strong>IROS 2026</strong></p>
 </p>
-
----
 
 <p align="center">
   <h3 align="center">
